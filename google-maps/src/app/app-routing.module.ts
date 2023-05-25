@@ -5,6 +5,11 @@ const routes: Routes = [
   {
     path: 'navagis-map',
     loadChildren: () => import('./map/map.module').then(m => m.MapModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'navagis-map',
+    pathMatch: 'full'
   }
 ];
 

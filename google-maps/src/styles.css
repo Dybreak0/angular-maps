@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.marker-label {
+  width: 120px;
+  font-weight: bold;
+  font-size: 15px;
+  white-space: pre-wrap;
+  color: #062e71 !important;
+  margin-top: 60px;
+}
+

@@ -1,38 +1,112 @@
-<div class="layer-panel">
-  <label *ngFor="let type of restaurantTypes">
-    <input
-      type="checkbox"
-      [(ngModel)]="type.checked"
-      (change)="updateMarkers()"
-    />
-    {{ type.type }}
-  </label>
+
+<div class="container">
+  <!-- <button class="toggle-button" (click)="toggleSidebar()">Filter</button>
+  <div class="layer" [ngClass]="{ 'show-layer': isPanelHidden }">
+    <div class="layer-content">
+      <div s>
+        <span class="close-button" id="exit" (click)="toggleSidebar()">&times;</span>
+      </div>
+      <label *ngFor="let restaurant of restaurantTypes" class="label-content">
+        <input
+          type="checkbox"
+          [(ngModel)]="restaurant.checked"
+          (change)="updateMarkers()"
+        />
+        {{ restaurant.name }}
+      </label>
+    </div>
+  </div> -->
+
+  <div class="panel">
+    <div class="dropdown" [class.open]="isDropdownFilter">
+      <button class="dropdown-toggle" (click)="toggleDropdownFilter()">
+        <div class="dropdown-title">
+          Filter
+        </div>
+        <div [class.caret]="isDropdownFilter">
+          <span>&#9660;</span>
+        </div>
+      </button>
+      <ul class="dropdown-menu">
+        <li *ngFor="let restaurant of restaurantTypes">
+          <label class="label-content">
+            <input
+              type="checkbox"
+              [(ngModel)]="restaurant.checked"
+              (change)="updateMarkers()"
+            />
+            <div class="label">{{ restaurant.name }}</div>
+          </label>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dropdown" [class.open]="isDropdownOptions">
+      <button class="dropdown-toggle" (click)="toggleDropdownOptions()">
+        <div class="dropdown-title">
+          Options
+        </div>
+        <div [class.caret]="isDropdownOptions">
+          <span>&#9660;</span>
+        </div>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <label class="label-content">
+            <input
+            type="checkbox"
+            [(ngModel)]="showSearchPolygon"/>
+            Show polygon
+          </label>
+        </li>
+        <li>
+          <label class="label-content">
+            <input
+            type="checkbox"
+            [(ngModel)]="showSearchArea"/>
+            Show search area
+          </label>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <google-map
+              height="100%"
+              width="100%"
+              [options]="mapOptions">
+    <map-marker #marker="mapMarker"
+                *ngFor="let markerItem of markers"
+                [position]="markerItem.position"
+                [label]="markerItem.label"
+                [options]="markerItem.options"
+                icon="assets/restaurant.png"
+                (mapClick)="openInfoWindow(marker, markerItem)">
+    </map-marker>
+    <map-info-window #markerInfoWindow>
+      <div class="place-details">
+        <img [src]="selectedPlace?.photos[0]?.getUrl()" class="place-image">
+        <h4>{{ selectedPlace?.name }}</h4>
+        <div>{{ selectedPlace?.formatted_address }}</div>
+        <ng-container *ngIf="selectedPlace?.opening_hours.isOpen(); else elseBlock">
+          <div style="color: green">Open</div>
+        </ng-container>
+        <ng-template #elseBlock>
+          <div style="color: red">Closed</div>
+        </ng-template>
+        <div>{{ selectedPlace?.rating }}</div>
+        <p>
+        <ng-container *ngFor="let weekday of selectedPlace?.opening_hours.weekday_text">
+          <div>{{ weekday }}</div>
+        </ng-container>
+        </p>
+        <input class="direction-button" type="button" value="Directions" (click)="getDirections()" />
+      </div>
+    </map-info-window>
+    <map-polygon [paths]="vertices" [options]="polygonOptions" *ngIf="showSearchPolygon"></map-polygon>
+    <map-polygon [paths]="searchArea" [options]="polygonOptions" *ngIf="showSearchArea"></map-polygon>
+    <!-- <map-circle [center]="center"
+    [radius]="radius"></map-circle> -->
+
+  </google-map>
 </div>
-
-<input
-type="checkbox"
-[(ngModel)]="show"
-/>
-Show polygon
-
-<google-map
-            height="80vh"
-            width="98.5vw"
-            [options]="mapOptions">
-  <map-marker #marker="mapMarker"
-              *ngFor="let markerItem of markers"
-              [position]="markerItem.position"
-              [options]="markerItem.options"
-              icon="assets/restaurant.png"
-              (mapClick)="openInfoWindow(marker, markerItem)"></map-marker>
-              <map-info-window #markerInfoWindow>
-                <div>
-                  <h4>{{ selectedPlace?.title }}</h4>
-                  <p>{{ selectedPlace?.label.text }}</p>
-                </div>
-              </map-info-window>
-  <map-polygon [paths]="vertices" *ngIf="show"></map-polygon>
-  <!-- <map-circle [center]="center"
-  [radius]="radius"></map-circle> -->
-
-</google-map>
