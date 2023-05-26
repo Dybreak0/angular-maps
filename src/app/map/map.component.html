@@ -1,76 +1,33 @@
 
-<div class="container">
-  <!-- <button class="toggle-button" (click)="toggleSidebar()">Filter</button>
-  <div class="layer" [ngClass]="{ 'show-layer': isPanelHidden }">
-    <div class="layer-content">
-      <div s>
-        <span class="close-button" id="exit" (click)="toggleSidebar()">&times;</span>
+<div class="panel">
+  <div class="dropdown" [class.open]="isDropdownFilter">
+    <button class="dropdown-toggle" (click)="toggleDropdownFilter()">
+      <div class="dropdown-title">
+        Filter
       </div>
-      <label *ngFor="let restaurant of restaurantTypes" class="label-content">
-        <input
-          type="checkbox"
-          [(ngModel)]="restaurant.checked"
-          (change)="updateMarkers()"
-        />
-        {{ restaurant.name }}
-      </label>
-    </div>
-  </div> -->
-
-  <div class="panel">
-    <div class="dropdown" [class.open]="isDropdownFilter">
-      <button class="dropdown-toggle" (click)="toggleDropdownFilter()">
-        <div class="dropdown-title">
-          Filter
-        </div>
-        <div [class.caret]="isDropdownFilter">
-          <span>&#9660;</span>
-        </div>
-      </button>
-      <ul class="dropdown-menu">
-        <li *ngFor="let restaurant of restaurantTypes">
-          <label class="label-content">
-            <input
-              type="checkbox"
-              [(ngModel)]="restaurant.checked"
-              (change)="updateMarkers()"
-            />
-            <div class="label">{{ restaurant.name }}</div>
-          </label>
-        </li>
-      </ul>
-    </div>
-
-    <div class="dropdown" [class.open]="isDropdownOptions">
-      <button class="dropdown-toggle" (click)="toggleDropdownOptions()">
-        <div class="dropdown-title">
-          Options
-        </div>
-        <div [class.caret]="isDropdownOptions">
-          <span>&#9660;</span>
-        </div>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <label class="label-content">
-            <input
+      <div [class.caret]="isDropdownFilter">
+        <span>&#9660;</span>
+      </div>
+    </button>
+    <ul class="dropdown-menu">
+      <li *ngFor="let restaurant of restaurantTypes">
+        <label class="label-content">
+          <input
             type="checkbox"
-            [(ngModel)]="showSearchPolygon"/>
-            Show polygon
-          </label>
-        </li>
-        <li>
-          <label class="label-content">
-            <input
-            type="checkbox"
-            [(ngModel)]="showSearchArea"/>
-            Show search area
-          </label>
-        </li>
-      </ul>
-    </div>
+            [(ngModel)]="restaurant.checked"
+            (change)="updateMarkers()"
+          />
+          <div class="label">{{ restaurant.name }}</div>
+        </label>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown">
+    <input class="autocomplete-input" type="text" #autoCompleteField placeholder="Enter starting location">
   </div>
 
+</div>
+<div class="container">
   <google-map
               height="100%"
               width="100%"
@@ -103,10 +60,5 @@
         <input class="direction-button" type="button" value="Directions" (click)="getDirections()" />
       </div>
     </map-info-window>
-    <map-polygon [paths]="vertices" [options]="polygonOptions" *ngIf="showSearchPolygon"></map-polygon>
-    <map-polygon [paths]="searchArea" [options]="polygonOptions" *ngIf="showSearchArea"></map-polygon>
-    <!-- <map-circle [center]="center"
-    [radius]="radius"></map-circle> -->
-
   </google-map>
 </div>
